@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ejer</title>
+</head>
+<body>
+	<form >
+		<table>
+			<tr>
+				<td>Nombre de usuario:</td>	
+				<td><input type="text" name="Nombre" id="caja"></td>	
+				<td><a href="#" id="enlace">Comprobar disponibilidad</a></td>	
+			</tr>
+		</table>
+	</form>
+
+
+
+
+	<script>
+		/* VARIABLES */
+        var enlace;
+        var datosPHP;
+
+
+        //1ºOyenteEvento -> Al cargar la pagina obtenemos las variablesHTML:
+        document.addEventListener( 'readystatechange', inicializar, false);
+
+
+		function inicializar(){
+			if (document.readyState == 'complete') {
+                enlace = document.getElementById("enlace");
+
+                //2ºOyenteEvento -> Tras hacer click en el enlace lanzamos peticionAJAX
+                enlace.addEventListener( 'click', peticionAJAX, false);
+            }
+		}
+
+		function peticionAJAX(evento){
+            //Obj_XMLHttpRequest:
+            let xhr = new XMLHttpRequest();
+            xhr.addEventListener('readystatechange', obtenerInfoPHP, false);
+            xhr.open('POST', 'ajax.php', true);
+            xhr.send(null);
+        }
+
+		function obtenerInfoPHP(evento){
+			//console.log(event.target.readyState); -> == 4   -> Petición finalizada
+            //console.log(event.target.status);     -> == 200 -> Petición correcta
+            if((evento.target.readyState == 4) && (evento.target.status == 200)) {
+                //Obtenemos datosPHP respuesta_servidor ante PeticionAjax
+                datosPHP = evento.target.responseText;
+                //console.log(datosPHP);
+
+
+                //Visualizar Resu
+				if(datosPHP == 'si'){
+					alert("Nombre de usuario disponible");
+				}else{
+					alert("Nombre de usuario NO disponible");
+				}
+            }
+		}
+	</script>
+</body>
+</html>
